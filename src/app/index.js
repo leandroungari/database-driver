@@ -1,28 +1,28 @@
 import {
   storeDataset,
   storeState,
-  
+
   stateExists,
-  datasetExists
+  datasetExists,
 } from './state';
 
 class App {
 
   constructor() {
     this.prompter = undefined;
-   
+
     this.createAppFiles();
   }
 
   createAppFiles() {
     if (!stateExists()) storeState({
-      datasets: []
+      datasets: [],
+      currentDatabase: undefined
     });
 
     if (!datasetExists()) storeDataset({
       datasets: []
     });
-
   }
 
   databases(list = []) {
@@ -30,6 +30,10 @@ class App {
       ...list
     ];
     return this;
+  }
+
+  getDatabases() {
+    return this.listOfDatabases;
   }
 
   prompt(cmd) {

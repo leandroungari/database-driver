@@ -1,5 +1,20 @@
 import readlineSync from 'readline-sync';
-import { initialQuestion } from './questions';
+import { 
+  initialQuestion, 
+  selectDriverQuestion, 
+  optionsDatasetsQuestion, 
+  createDatasetQuestion ,
+  removeDatasetQuestion
+} from './questions';
+
+import { 
+  initialAnswer, 
+  selectDriverAnswer, 
+  optionsDatasetsAnswer, 
+  createDatasetAnswer,  
+  listDatasetAnswer,
+  removeDatasetAnswer
+} from './answers';
 
 class Prompter {
   constructor() {
@@ -28,7 +43,7 @@ class Prompter {
   }
 
   ask({message, question, choices, cancel = false}) {
-    console.log(message);
+    console.log(`\n${message}`);
     const index = readlineSync.keyInSelect(
       choices, 
       question, 
@@ -46,15 +61,31 @@ class Prompter {
     switch(name) {
       case 'initial':
         answer = this.ask(initialQuestion);
-        
+        initialAnswer(answer, this);
         break;
 
       case 'select-driver':
-
+        answer = this.ask(selectDriverQuestion());
+        selectDriverAnswer(answer);
         break;
 
       case 'dataset':
+        answer = this.ask(optionsDatasetsQuestion);
+        optionsDatasetsAnswer(answer, this);
+        break;
 
+      case 'create-dataset':
+        answer = createDatasetQuestion();
+        createDatasetAnswer(answer);
+        break;
+
+      case 'list-all-datasets':
+        listDatasetAnswer();
+        break;
+
+      case 'remove-dataset':
+        answer = removeDatasetQuestion();
+        removeDatasetAnswer(answer);
         break;
 
       case 'database':
