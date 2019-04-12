@@ -1,3 +1,5 @@
+import app from "../app";
+
 export const initialQuestion = {
   message: 'Please select an option',
   question: 'Which option? ',
@@ -7,5 +9,14 @@ export const initialQuestion = {
     'Database operations'
   ],
   cancel: 'Close program'
+}
+
+export const selectDriverQuestion = () => {
+  return {
+    message: 'Please select a driver to use in next tests',
+    question: 'Which driver? ',
+    choices: app.getDatabases().map(a => a.name),
+    cancel: false
+  };
 }
 

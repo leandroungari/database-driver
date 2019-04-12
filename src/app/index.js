@@ -1,22 +1,25 @@
 import {
   storeDataset,
   storeState,
-  
+
   stateExists,
-  datasetExists
+  datasetExists,
+  loadState
 } from './state';
 
 class App {
 
   constructor() {
     this.prompter = undefined;
-   
+    this.currentDatabase = undefined;
+
     this.createAppFiles();
   }
 
   createAppFiles() {
     if (!stateExists()) storeState({
-      datasets: []
+      datasets: [],
+      currentDatabase: undefined
     });
 
     if (!datasetExists()) storeDataset({
@@ -25,11 +28,26 @@ class App {
 
   }
 
+  changeDatabase(name) {
+    const state = loadState();
+    state.currentDatabase = name;
+    storeState(state);
+  }
+
   databases(list = []) {
     this.listOfDatabases = [
       ...list
     ];
     return this;
+  }
+
+  getDatabases() {
+    return this.listOfDatabases;
+  }
+
+  getCurrentDatabase() {
+    const state = loadState();
+    return state.currentDatabase;
   }
 
   prompt(cmd) {
