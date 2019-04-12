@@ -1,6 +1,6 @@
 import readlineSync from 'readline-sync';
-import { initialQuestion, selectDriverQuestion } from './questions';
-import { initialAnswer, selectDriverAnswer,  } from './answers';
+import { initialQuestion, selectDriverQuestion, optionsDatasetsQuestion, createDatasetQuestion } from './questions';
+import { initialAnswer, selectDriverAnswer, optionsDatasetsAnswer, createDatasetAnswer,  } from './answers';
 
 class Prompter {
   constructor() {
@@ -56,6 +56,20 @@ class Prompter {
         break;
 
       case 'dataset':
+        answer = this.ask(optionsDatasetsQuestion);
+        optionsDatasetsAnswer(answer, this);
+        break;
+
+      case 'create-dataset':
+        answer = createDatasetQuestion();
+        createDatasetAnswer(answer);
+        break;
+
+      case 'list-all-datasets':
+
+        break;
+
+      case 'remove-dataset':
 
         break;
 

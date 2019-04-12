@@ -1,4 +1,5 @@
 import app from "../app";
+import readlineSync from 'readline-sync';
 
 export const initialQuestion = {
   message: 'Please select an option',
@@ -20,3 +21,26 @@ export const selectDriverQuestion = () => {
   };
 }
 
+export const optionsDatasetsQuestion = {
+  message: 'Please select an action',
+  question: 'What you wanna do? ',
+  choices: [
+    'Create dataset',
+    'List all datasets',
+    'Remove dataset'
+  ]
+}
+
+export const createDatasetQuestion = () => {
+  const name = readlineSync.question(
+    'Give a name to the dataset? ',
+    {limit: null}  
+  );
+  
+  const path = readlineSync.questionPath(
+    'Type the filepath to dataset: ',
+    {limit: null}
+  );
+
+  return {name, path};
+}

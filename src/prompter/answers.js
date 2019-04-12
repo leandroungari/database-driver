@@ -1,4 +1,5 @@
-import app from "../app";
+import databaseManager from '../app/database';
+import datasetManager from '../app/dataset';
 
 export const initialAnswer = (answer, prompt) => {
   switch(answer) {
@@ -19,8 +20,29 @@ export const initialAnswer = (answer, prompt) => {
 };
 
 export const selectDriverAnswer = (answer) => {
-  app.changeDatabase(answer);
+  databaseManager.changeDatabase(answer);
   console.log(
-    `Database selected: ${app.getCurrentDatabase()}`
+    `Database selected: ${databaseManager.getCurrentDatabase()}`
   );
+}
+
+export const optionsDatasetsAnswer = (answer, prompt) => {
+  switch(answer) {
+    case 'Create dataset':
+      prompt.makeQuestion('create-dataset');
+      break;
+    
+    case 'List all datasets':
+      prompt.makeQuestion('list-all-datasets');
+      break;
+
+    case 'Remove dataset':
+      prompt.makeQuestion('remove-dataset');
+      break;
+  }
+}
+
+export const createDatasetAnswer = ({name, path}) => {
+  datasetManager.createDataset(name, path);
+  console.log(`Dataset ${name} created`);
 }

@@ -4,14 +4,12 @@ import {
 
   stateExists,
   datasetExists,
-  loadState
 } from './state';
 
 class App {
 
   constructor() {
     this.prompter = undefined;
-    this.currentDatabase = undefined;
 
     this.createAppFiles();
   }
@@ -25,13 +23,6 @@ class App {
     if (!datasetExists()) storeDataset({
       datasets: []
     });
-
-  }
-
-  changeDatabase(name) {
-    const state = loadState();
-    state.currentDatabase = name;
-    storeState(state);
   }
 
   databases(list = []) {
@@ -43,11 +34,6 @@ class App {
 
   getDatabases() {
     return this.listOfDatabases;
-  }
-
-  getCurrentDatabase() {
-    const state = loadState();
-    return state.currentDatabase;
   }
 
   prompt(cmd) {
