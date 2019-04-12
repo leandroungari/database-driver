@@ -1,0 +1,19 @@
+{
+  "name": "database-driver",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "babel-node src/index.js",
+    "build": "babel src --out-dir dist",
+    "play": "node dist/index.js"
+  },
+  "repository": "https://github.com/leandroungari/database-driver.git",
+  "author": "Leandro Ungari <leandroungari@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.4.2"
+  }
+}
