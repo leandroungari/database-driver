@@ -1,6 +1,18 @@
 import readlineSync from 'readline-sync';
-import { initialQuestion, selectDriverQuestion, optionsDatasetsQuestion, createDatasetQuestion } from './questions';
-import { initialAnswer, selectDriverAnswer, optionsDatasetsAnswer, createDatasetAnswer,  } from './answers';
+import { 
+  initialQuestion, 
+  selectDriverQuestion, 
+  optionsDatasetsQuestion, 
+  createDatasetQuestion 
+} from './questions';
+
+import { 
+  initialAnswer, 
+  selectDriverAnswer, 
+  optionsDatasetsAnswer, 
+  createDatasetAnswer,  
+  listDatasetAnswer
+} from './answers';
 
 class Prompter {
   constructor() {
@@ -66,7 +78,7 @@ class Prompter {
         break;
 
       case 'list-all-datasets':
-
+        listDatasetAnswer();
         break;
 
       case 'remove-dataset':

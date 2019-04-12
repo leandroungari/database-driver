@@ -46,3 +46,10 @@ export const createDatasetAnswer = ({name, path}) => {
   datasetManager.createDataset(name, path);
   console.log(`Dataset ${name} created`);
 }
+
+export const listDatasetAnswer = () => {
+  console.log("\nList of datasets:");
+  datasetManager.listDataset().forEach(({name, size}) => {
+    console.log(`#${name} (${size})`);
+  });
+}
