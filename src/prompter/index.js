@@ -3,7 +3,8 @@ import {
   initialQuestion, 
   selectDriverQuestion, 
   optionsDatasetsQuestion, 
-  createDatasetQuestion 
+  createDatasetQuestion ,
+  removeDatasetQuestion
 } from './questions';
 
 import { 
@@ -11,7 +12,8 @@ import {
   selectDriverAnswer, 
   optionsDatasetsAnswer, 
   createDatasetAnswer,  
-  listDatasetAnswer
+  listDatasetAnswer,
+  removeDatasetAnswer
 } from './answers';
 
 class Prompter {
@@ -82,7 +84,8 @@ class Prompter {
         break;
 
       case 'remove-dataset':
-
+        answer = removeDatasetQuestion();
+        removeDatasetAnswer(answer);
         break;
 
       case 'database':

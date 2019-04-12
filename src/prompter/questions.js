@@ -44,3 +44,12 @@ export const createDatasetQuestion = () => {
 
   return {name, path};
 }
+
+export const removeDatasetQuestion = () => {
+  const name = readlineSync.question(
+    'Give a name to the dataset? ',
+    {limit: null}  
+  );
+
+  return name;
+}

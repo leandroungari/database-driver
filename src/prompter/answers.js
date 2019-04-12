@@ -53,3 +53,13 @@ export const listDatasetAnswer = () => {
     console.log(`#${name} (${size})`);
   });
 }
+
+export const removeDatasetAnswer = name => {
+  if (datasetManager.thereIsDataset(name)) {
+    datasetManager.deleteDataset(name);
+    console.log(`Dataset '${name}' removed`);
+  }
+  else {
+    console.log(`Dataset '${name}' doesn't exist`);
+  }
+}

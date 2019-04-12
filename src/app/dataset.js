@@ -71,7 +71,7 @@ class DatasetManager {
   
   thereIsDataset(name) {
   
-    return listDataset()
+    return this.listDataset()
     .map(dataset => dataset.name)
     .includes(name);
   }
