@@ -4,8 +4,14 @@ import prompter from './prompter';
 
 app
   .databases([
-    {name: 'MongoClient'},
-    {name: 'Mongoose'}
+    {
+      name: 'MongoClient',
+      driver: undefined
+    },
+    {
+      name: 'Mongoose',
+      driver: undefined
+    }
   ])
   .prompt(prompter.start())
   .play();
