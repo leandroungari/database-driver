@@ -4,7 +4,11 @@ import {
   selectDriverQuestion, 
   optionsDatasetsQuestion, 
   createDatasetQuestion ,
-  removeDatasetQuestion
+  removeDatasetQuestion,
+  optionsDatabaseQuestion,
+  databaseCreateQuestion,
+  databaseDeleteQuestion,
+  databaseUpdateQuestion
 } from './questions';
 
 import { 
@@ -13,7 +17,12 @@ import {
   optionsDatasetsAnswer, 
   createDatasetAnswer,  
   listDatasetAnswer,
-  removeDatasetAnswer
+  removeDatasetAnswer,
+  optionsDatabaseAnswer,
+  databaseCreateAnswer,
+  databaseReadAnswer,
+  databaseUpdateAnswer,
+  databaseDeleteAnswer
 } from './answers';
 
 class Prompter {
@@ -89,9 +98,30 @@ class Prompter {
         break;
 
       case 'database':
-
+        answer = this.ask(optionsDatabaseQuestion);
+        optionsDatabaseAnswer(answer, this);
         break;
 
+      case 'database-create':
+        answer = databaseCreateQuestion();
+        databaseCreateAnswer(answer);
+        break;
+
+      case 'database-read':
+        answer = databaseDeleteQuestion();
+        databaseReadAnswer(answer);
+        break;
+      
+      case 'database-update':
+        answer = databaseUpdateQuestion();
+        databaseUpdateAnswer(answer);
+        break;
+
+      case 'database-delete': 
+        answer = databaseDeleteQuestion();
+        databaseDeleteAnswer(answer);
+        break;
+        
       case 'close':
         this.stop();
         break;

@@ -14,6 +14,27 @@ class DatabaseManager {
     const state = loadState();
     return state.currentDatabase;
   }
+
+  database(name) {
+    
+    return this;
+  }
+
+  create(collection, data) {
+    console.log("create");
+  }
+
+  read(collection, condition) {
+    console.log("read");
+  }
+
+  update(collection, condition, values) {
+    console.log("update");
+  }
+
+  delete(collection, condition) {
+    console.log("delete");
+  }
 }
 
 export default new DatabaseManager();
