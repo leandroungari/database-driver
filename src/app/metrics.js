@@ -14,7 +14,7 @@ export default class Metric {
 
   result() {
     return {
-      time: this.timeEnd[1]/1000000;
+      time: this.timeEnd[1]/1000000
     }
   }
 }
