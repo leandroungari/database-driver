@@ -58,7 +58,7 @@ export default class MongoClientDB {
       .collection(collection)
       .updateMany(condition, {$set: values});
 
-      return result.upsertedCount;
+      return result.modifiedCount;
     } 
     catch(error) {
       console.log(error);
@@ -73,7 +73,7 @@ export default class MongoClientDB {
       .collection(collection)
       .deleteMany(condition);
 
-      return result.deleteCount;
+      return result.deletedCount;
     }
     catch(error) {
       console.log(error);

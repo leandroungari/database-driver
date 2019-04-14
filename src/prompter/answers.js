@@ -93,22 +93,36 @@ export const databaseCreateAnswer = async ({dataset, database, collection}) => {
   .database(database)
   .then(db => db.create(collection, data))
   .then(result => {
-    console.log(`After that, ${result} item(s) was inserted`);
+    saveStats({
+      command: 'Create',
+      driver: databaseManager.getCurrentDatabase(),
+      database,
+      collection,
+      dataset,
+      message: `After that, ${result} item(s) was inserted`
+    });
+    databaseManager.close();
   });
   
 }
 
 export const databaseReadAnswer = async ({database, collection, condition}) => {
   
+  condition = (condition === "" ? "{}" : condition);
+  
   databaseManager
   .database(database)
-  .then(db => db.read(collection, condition))
+  .then(db => db.read(
+    collection, 
+    JSON.parse(condition)
+  ))
   .then(result => {
     saveStats({
       command: 'Read',
       driver: databaseManager.getCurrentDatabase(),
       database,
       collection,
+      condition: JSON.stringify(condition),
       message: `This search returns ${result.length} item(s)`
     });
     databaseManager.close();
@@ -116,17 +130,50 @@ export const databaseReadAnswer = async ({database, collection, condition}) => {
 }
 
 export const databaseUpdateAnswer = async ({database, collection, condition, values}) => {
-  const result = await databaseManager
-  .database(database)
-  .then(db => db.update(collection, condition, values));
   
-  console.log(`This operation updated ${result} item(s)`);
+  condition = (condition === "" ? "{}" : condition);
+  values = (values === "" ? "{}" : values);
+  
+  databaseManager
+  .database(database)
+  .then(db => db.update(
+    collection, 
+    JSON.parse(condition), 
+    JSON.parse(values)
+  ))
+  .then(result => {
+    saveStats({
+      command: 'Update',
+      driver: databaseManager.getCurrentDatabase(),
+      database,
+      collection,
+      condition: JSON.stringify(condition),
+      values: JSON.stringify(values),
+      message: `This operation updated ${result} item(s)`
+    });
+    databaseManager.close();
+  });
 }
 
 export const databaseDeleteAnswer = async ({database, collection, condition}) => {
-  const result = await databaseManager
-  .database(database)
-  .then(db => db.delete(collection, condition));
   
-  console.log(`This operation deleted ${result} item(s)`);
+  condition = (condition === "" ? "{}" : condition);
+  
+  databaseManager
+  .database(database)
+  .then(db => db.delete(
+    collection, 
+    JSON.parse(condition)
+  ))
+  .then(result => {
+    saveStats({
+      command: 'Delete',
+      driver: databaseManager.getCurrentDatabase(),
+      database,
+      collection,
+      condition: JSON.stringify(condition),
+      message: `This operation deleted ${result} item(s)`
+    });
+    databaseManager.close();
+  });
 }
