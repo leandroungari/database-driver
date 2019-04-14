@@ -2,6 +2,7 @@ import fs from "fs";
 
 const stateFilePath = "./app.json";
 const datasetFilePath = "./dataset.json";
+const statsFilePath = "./stats.json";
 
 const load = (filePath) => {
   const fileBuffer = fs.readFileSync(
@@ -17,6 +18,13 @@ const store = (filePath, data) => {
 }
 
 const exists = path => fs.existsSync(path);
+
+const loadStats = () =>
+  load(statsFilePath);
+const storeStats = stats =>
+  store(statsFilePath, stats);
+const statsExists = () =>
+  exists(statsFilePath);
 
 const loadState = () => 
   load(stateFilePath);
@@ -41,4 +49,8 @@ export {
   loadDataset,
   storeDataset,
   datasetExists,
+
+  loadStats,
+  storeStats,
+  statsExists
 }

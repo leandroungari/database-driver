@@ -22,69 +22,77 @@ class DatabaseManager {
     return state.currentDatabase;
   }
 
-  database() {
-    this.currentDatabase = app
-    .getDatabases()
-    .filter(database => {
-      return database.name === this.getCurrentDatabase();
-    })[0].driver;
+  async database(name) {
+    try {
+      
+      this.currentDatabase = app
+      .getDatabases()
+      .filter(database => {
+        return database.name === this.getCurrentDatabase();
+      })[0].driver;
+      
+      await this.currentDatabase.connect(name);
+    }
+    catch(error) {
+      console.error(`Connection error: ${error}`);
+    }
     return this;
   }
 
-  create(collection, data) {
-    this.currentDatabase.create(
-      collection, 
-      data
-    )
-    .then(result => {
-      console.log(result);
-    })
-    .catch(error => {
+  async create(collection, data) {
+
+    try {
+      return await this.currentDatabase.create(
+        collection, 
+        data
+      );
+    }
+    catch(error) {
       console.error(error);
-    });
+    }
   }
 
-  read(collection, condition) {
-    this.currentDatabase.read(
-      collection, 
-      condition
-    )
-    .then(result => {
-      console.log(result);
-    })
-    .catch(error => {
+  async read(collection, condition) {
+    
+    try {
+      return await this.currentDatabase.read(
+        collection, 
+        condition
+      );
+    }
+    catch(error) {
       console.error(error);
-    });
+    }
   }
 
-  update(collection, condition, values) {
-    this.currentDatabase.update(
-      collection,
-      condition,
-      values
-    )
-    .then(result => {
-      console.log(result);
-    })
-    .catch(error => {
+  async update(collection, condition, values) {
+    
+    try {
+      return await this.currentDatabase.update(
+        collection,
+        condition,
+        values
+      );
+    }
+    catch(error) {
       console.error(error);
-    });
+    }
   }
 
-  delete(collection, condition) {
-    this.currentDatabase.delete(
-      collection,
-      condition
-    )
-    .then(result => {
-      console.log(result);
-    })
-    .catch(error => {
+  async delete(collection, condition) {
+    
+    try {
+      return await this.currentDatabase.delete(
+        collection,
+        condition
+      );
+    }
+    catch(error) {
       console.error(error);
-    });
+    }
   }
 
-  close() {
+  async close() {
     this.currentDatabase.close();
   }
 }

@@ -16,10 +16,12 @@ export default class MongooseDB {
     
   }
 
-  connect(database) {
-    mongoose.connection(
+  async connect(database) {
+    await mongoose.connection(
       `mongodb://localhost:27017/${database}`
     );
+
+    return this;
   }
 
   getModel(model) {

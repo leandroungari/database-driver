@@ -1,17 +1,12 @@
 import app from './app';
 import prompter from './prompter';
 
+import {
+  mongoClient,
+  mongoose
+} from './database';
 
 app
-  .databases([
-    {
-      name: 'MongoClient',
-      driver: undefined
-    },
-    {
-      name: 'Mongoose',
-      driver: undefined
-    }
-  ])
+  .databases([mongoClient, mongoose])
   .prompt(prompter.start())
   .play();

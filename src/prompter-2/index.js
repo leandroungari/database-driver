@@ -7,6 +7,7 @@ import {
   removeDatasetQuestion,
   optionsDatabaseQuestion,
   databaseCreateQuestion,
+  databaseReadQuestion,
   databaseDeleteQuestion,
   databaseUpdateQuestion
 } from './questions';
@@ -40,18 +41,12 @@ class Prompter {
     return this;
   }
 
-  prompt() {
-    while(this.isRunning) {
-
-      setTimeout(() => {
-      
-      }, 5000);
-
-      this.makeQuestion();
-    }
+  async prompt() {
+    setTimeout(() => {}, 1000);
+    if(this.isRunning) this.makeQuestion();
   }
 
-  ask({message, question, choices, cancel = false}) {
+  async ask({message, question, choices, cancel = false}) {
     console.log(`\n${message}`);
     const index = readlineSync.keyInSelect(
       choices, 
@@ -64,28 +59,29 @@ class Prompter {
     return choices[index];
   }
 
-  makeQuestion(name = 'initial') {
+  async makeQuestion(name = 'initial') {
     let answer;
 
     switch(name) {
       case 'initial':
-        answer = this.ask(initialQuestion);
-        initialAnswer(answer, this);
+        this.ask(initialQuestion)
+        .then(answer => initialAnswer(answer, this))
+        .then(() => this.prompt());
         break;
 
       case 'select-driver':
-        answer = this.ask(selectDriverQuestion());
-        selectDriverAnswer(answer);
+        this.ask(selectDriverQuestion())
+        .then(selectDriverAnswer);
         break;
 
       case 'dataset':
-        answer = this.ask(optionsDatasetsQuestion);
-        optionsDatasetsAnswer(answer, this);
+        this.ask(optionsDatasetsQuestion)
+        .then(answer => optionsDatasetsAnswer(answer, this));
         break;
 
       case 'create-dataset':
-        answer = createDatasetQuestion();
-        createDatasetAnswer(answer);
+        createDatasetQuestion()
+        .then(createDatasetAnswer);
         break;
 
       case 'list-all-datasets':
@@ -93,33 +89,33 @@ class Prompter {
         break;
 
       case 'remove-dataset':
-        answer = removeDatasetQuestion();
-        removeDatasetAnswer(answer);
+        removeDatasetQuestion()
+        .then(removeDatasetAnswer);
         break;
 
       case 'database':
-        answer = this.ask(optionsDatabaseQuestion);
-        optionsDatabaseAnswer(answer, this);
+        this.ask(optionsDatabaseQuestion)
+        .then(answer => optionsDatabaseAnswer(answer, this));
         break;
 
       case 'database-create':
-        answer = databaseCreateQuestion();
-        databaseCreateAnswer(answer);
+        databaseCreateQuestion()
+        .then(databaseCreateAnswer);
         break;
 
       case 'database-read':
-        answer = databaseDeleteQuestion();
-        databaseReadAnswer(answer);
+        databaseReadQuestion()
+        .then(databaseReadAnswer);
         break;
       
       case 'database-update':
-        answer = databaseUpdateQuestion();
-        databaseUpdateAnswer(answer);
+        databaseUpdateQuestion()
+        .then(databaseUpdateAnswer);
         break;
-
+        
       case 'database-delete': 
-        answer = databaseDeleteQuestion();
-        databaseDeleteAnswer(answer);
+        databaseDeleteQuestion()
+        .then(databaseDeleteAnswer);
         break;
         
       case 'close':
