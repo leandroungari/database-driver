@@ -17,15 +17,16 @@ export default class MongooseDB {
   }
 
   async connect(database) {
-    await mongoose.connection(
-      `mongodb://localhost:27017/${database}`
+    await mongoose.connect(
+      `mongodb://localhost:27017/${database}`,
+      {useNewUrlParser: true}
     );
 
     return this;
   }
 
   getModel(model) {
-    if(!Object.keys().includes(model)) throw new Error('Schema not found!');
+    if(!Object.keys(schemas).includes(model)) throw new Error('Schema not found!');
     return mongoose.model(model, schemas[model]);
   }
 
@@ -34,7 +35,7 @@ export default class MongooseDB {
       const model = this.getModel(collection);
       model.insertMany(data, (error, docs) => {
         if(error) reject(error);
-        resolve(docs);
+        resolve(docs.length);
       });
     });
   }
@@ -54,7 +55,7 @@ export default class MongooseDB {
       const model = this.getModel(collection);
       model.updateMany(condition, values, (err, res) => {
         if(err) reject(err);
-        resolve(res);
+        resolve(res.nModified);
       })
     });
   }
@@ -64,7 +65,7 @@ export default class MongooseDB {
       const model = this.getModel(collection);
       model.deleteMany(condition, (err, res) => {
         if(err) reject(err);
-        resolve(res);
+        resolve(res.deletedCount);
       });
     });
   }
