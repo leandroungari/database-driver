@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import {
-
+  jogadores
 } from './schemas';
 
 const schemas = {
-
+  jogadores
 };
 
 export default class MongooseDB {
