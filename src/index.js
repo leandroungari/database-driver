@@ -1,11 +1,12 @@
 import app from './app';
 import prompter from './prompter';
 
+import {
+  mongoClient,
+  mongoose
+} from './database';
 
 app
-  .databases([
-    {name: 'MongoClient'},
-    {name: 'Mongoose'}
-  ])
+  .databases([mongoClient, mongoose])
   .prompt(prompter.start())
   .play();

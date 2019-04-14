@@ -31,7 +31,7 @@ export const optionsDatasetsQuestion = {
   ]
 }
 
-export const createDatasetQuestion = () => {
+export const createDatasetQuestion = async () => {
   const name = readlineSync.question(
     'Give a name to the dataset? ',
     {limit: null}  
@@ -45,7 +45,7 @@ export const createDatasetQuestion = () => {
   return {name, path};
 }
 
-export const removeDatasetQuestion = () => {
+export const removeDatasetQuestion = async () => {
   const name = readlineSync.question(
     'Give a name to the dataset? ',
     {limit: null}  
@@ -66,15 +66,16 @@ export const optionsDatabaseQuestion = {
   cancel: false
 }
 
-export const databaseCreateQuestion = () => {
-  const database = readlineSync.question(
-    'Which database do you want to use? '
-  );
-
+export const databaseCreateQuestion = async () => {
+  
   const dataset = readlineSync.question(
     'Which dataset do you want to use? '
   );
 
+  const database = readlineSync.question(
+    'Which database do you want to use? '
+  );
+  
   const collection = readlineSync.question(
     'What\'s the collection name? '
   );
@@ -84,7 +85,7 @@ export const databaseCreateQuestion = () => {
   }
 }
 
-export const databaseReadQuestion = () => {
+export const databaseReadQuestion = async () => {
   const database = readlineSync.question(
     'Which database do you want to use? '
   );
@@ -102,7 +103,7 @@ export const databaseReadQuestion = () => {
   }
 }
 
-export const databaseUpdateQuestion = () => {
+export const databaseUpdateQuestion = async () => {
   const database = readlineSync.question(
     'Which database do you want to use? '
   );
@@ -124,7 +125,7 @@ export const databaseUpdateQuestion = () => {
   }
 }
 
-export const databaseDeleteQuestion = () => {
+export const databaseDeleteQuestion = async () => {
   const database = readlineSync.question(
     'Which database do you want to use? '
   );

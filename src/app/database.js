@@ -3,7 +3,14 @@ import {
   storeState
 } from './state';
 
+import app from './index.js';
+
 class DatabaseManager {
+
+  constructor() {
+    this.currentDatabase = undefined;
+  }
+
   changeDatabase(name) {
     const state = loadState();
     state.currentDatabase = name;
@@ -15,25 +22,78 @@ class DatabaseManager {
     return state.currentDatabase;
   }
 
-  database(name) {
-    
+  async database(name) {
+    try {
+      
+      this.currentDatabase = app
+      .getDatabases()
+      .filter(database => {
+        return database.name === this.getCurrentDatabase();
+      })[0].driver;
+      
+      await this.currentDatabase.connect(name);
+    }
+    catch(error) {
+      console.error(`Connection error: ${error}`);
+    }
     return this;
   }
 
-  create(collection, data) {
-    console.log("create");
+  async create(collection, data) {
+
+    try {
+      return await this.currentDatabase.create(
+        collection, 
+        data
+      );
+    }
+    catch(error) {
+      console.error(error);
+    }
   }
 
-  read(collection, condition) {
-    console.log("read");
+  async read(collection, condition) {
+    
+    try {
+      return await this.currentDatabase.read(
+        collection, 
+        condition
+      );
+    }
+    catch(error) {
+      console.error(error);
+    }
   }
 
-  update(collection, condition, values) {
-    console.log("update");
+  async update(collection, condition, values) {
+    
+    try {
+      return await this.currentDatabase.update(
+        collection,
+        condition,
+        values
+      );
+    }
+    catch(error) {
+      console.error(error);
+    }
   }
 
-  delete(collection, condition) {
-    console.log("delete");
+  async delete(collection, condition) {
+    
+    try {
+      return await this.currentDatabase.delete(
+        collection,
+        condition
+      );
+    }
+    catch(error) {
+      console.error(error);
+    }
+  }
+
+  async close() {
+    this.currentDatabase.close();
   }
 }
 

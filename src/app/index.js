@@ -4,6 +4,8 @@ import {
 
   stateExists,
   datasetExists,
+  statsExists,
+  storeStats,
 } from './state';
 
 class App {
@@ -22,6 +24,10 @@ class App {
 
     if (!datasetExists()) storeDataset({
       datasets: []
+    });
+
+    if (!statsExists()) storeStats({
+      stats: []
     });
   }
 
