@@ -17,6 +17,7 @@
     "@babel/preset-env": "^7.4.2"
   },
   "dependencies": {
+    "js-meter": "^1.1.4",
     "mongodb": "^3.2.3",
     "mongoose": "^5.5.1",
     "readline-sync": "^1.4.9"
