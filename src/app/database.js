@@ -3,6 +3,8 @@ import {
   storeState
 } from './state';
 
+import Metric from './metrics';
+
 import app from './index.js';
 
 class DatabaseManager {
@@ -42,10 +44,18 @@ class DatabaseManager {
   async create(collection, data) {
 
     try {
-      return await this.currentDatabase.create(
+      const metric = new Metric();
+      metric.start();
+      const result = await this.currentDatabase.create(
         collection, 
         data
       );
+      metric.stop();
+
+      return {
+        result,
+        stats: metric.result()
+      }
     }
     catch(error) {
       console.error(error);
@@ -55,10 +65,17 @@ class DatabaseManager {
   async read(collection, condition) {
     
     try {
-      return await this.currentDatabase.read(
+      const metric = new Metric();
+      metric.start();
+      const result =  await this.currentDatabase.read(
         collection, 
         condition
       );
+      metric.stop();
+      return {
+        result,
+        stats: metric.result()
+      }
     }
     catch(error) {
       console.error(error);
@@ -68,11 +85,18 @@ class DatabaseManager {
   async update(collection, condition, values) {
     
     try {
-      return await this.currentDatabase.update(
+      const metric = new Metric();
+      metric.start();
+      const result = await this.currentDatabase.update(
         collection,
         condition,
         values
       );
+      metric.stop();
+      return {
+        result,
+        stats: metric.result()
+      }
     }
     catch(error) {
       console.error(error);
@@ -82,10 +106,17 @@ class DatabaseManager {
   async delete(collection, condition) {
     
     try {
-      return await this.currentDatabase.delete(
+      const metric = new Metric();
+      metric.start();
+      const result = await this.currentDatabase.delete(
         collection,
         condition
       );
+      metric.stop();
+      return {
+        result,
+        stats: metric.result()
+      }
     }
     catch(error) {
       console.error(error);
