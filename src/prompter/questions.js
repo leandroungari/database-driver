@@ -7,7 +7,8 @@ export const initialQuestion = {
   choices: [
     'Select a driver',
     'Dataset manipulation',
-    'Database operations'
+    'Database operations',
+    'CRUD test'
   ],
   cancel: 'Close program'
 }
@@ -142,4 +143,54 @@ export const databaseDeleteQuestion = async () => {
     condition, collection, database
   }
 }
+
+export const crudQuestion = async () => {
+  const database = readlineSync.question(
+    'Which database do you want to use? '
+  );
+
+  const collection = readlineSync.question(
+    'What\'s the collection name? '
+  );
+
+  const createDataset = readlineSync.question(
+    'To create operation, which dataset you want to use: '
+  );
+
+  const createItemsNumber = readlineSync.questionInt(
+    'To create operation, how many items you want to insert: '
+  );
+
+  const readCondition = readlineSync.question(
+    'To read operation, please, enter a condition: '
+  );
+
+  const updateCondition = readlineSync.question(
+    'To update operation, please, enter a condition: '
+  );
+
+  const updateValues = readlineSync.question(
+    'To update operation, enter the object of values: '
+  );
+
+  const deleteCondition = readlineSync.question(
+    'To delete operation, please, enter a condition: '
+  );
+
+  const repeat = readlineSync.questionInt(
+    'How many times do you want to repeat the tests: '
+  );
+
+  return {
+    database, 
+    collection, 
+    createDataset,
+    createItemsNumber,
+    readCondition,
+    updateCondition,
+    updateValues,
+    deleteCondition,
+    repeat
+  }
+};
 

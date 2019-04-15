@@ -9,7 +9,8 @@ import {
   databaseCreateQuestion,
   databaseReadQuestion,
   databaseDeleteQuestion,
-  databaseUpdateQuestion
+  databaseUpdateQuestion,
+  crudQuestion
 } from './questions';
 
 import { 
@@ -23,7 +24,8 @@ import {
   databaseCreateAnswer,
   databaseReadAnswer,
   databaseUpdateAnswer,
-  databaseDeleteAnswer
+  databaseDeleteAnswer,
+  crudAnswer
 } from './answers';
 
 class Prompter {
@@ -118,6 +120,12 @@ class Prompter {
       case 'database-delete': 
         databaseDeleteQuestion()
         .then(databaseDeleteAnswer);
+        break;
+
+      case 'crud-test':
+        crudQuestion()
+        .then(crudAnswer);
+
         break;
         
       case 'close':
