@@ -42,8 +42,10 @@ class Prompter {
   }
 
   async prompt() {
-    setTimeout(() => {}, 1000);
-    if(this.isRunning) this.makeQuestion();
+    while (this.isRunning) {
+      setTimeout(() => {}, 1000);
+      await this.makeQuestion();  
+    }
   }
 
   async ask({message, question, choices, cancel = false}) {
@@ -64,9 +66,9 @@ class Prompter {
 
     switch(name) {
       case 'initial':
-        this.ask(initialQuestion)
+        await this.ask(initialQuestion)
         .then(answer => initialAnswer(answer, this))
-        .then(() => this.prompt());
+        
         break;
 
       case 'select-driver':
