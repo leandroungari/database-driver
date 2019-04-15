@@ -1,6 +1,7 @@
 import databaseManager from '../app/database';
 import datasetManager from '../app/dataset';
 import { saveStats } from '../app/stats';
+import { get } from 'mongoose';
 
 
 export const initialAnswer = async (answer, prompt) => {
@@ -17,6 +18,11 @@ export const initialAnswer = async (answer, prompt) => {
     case 'Database operations':
       await prompt.makeQuestion('database');
       break;
+    
+    case 'CRUD test':
+      await prompt.makeQuestion('crud-test');
+      break;
+
     default:
       await prompt.makeQuestion('close');
   }
@@ -109,13 +115,13 @@ export const databaseCreateAnswer = async ({dataset, database, collection}) => {
 
 export const databaseReadAnswer = async ({database, collection, condition}) => {
   
-  condition = (condition === "" ? "{}" : condition);
+  condition = formatDataString(condition);
   
   databaseManager
   .database(database)
   .then(db => db.read(
     collection, 
-    JSON.parse(condition)
+    condition
   ))
   .then(({result, stats}) => {
     saveStats({
@@ -123,7 +129,7 @@ export const databaseReadAnswer = async ({database, collection, condition}) => {
       driver: databaseManager.getCurrentDatabase(),
       database,
       collection,
-      condition: JSON.stringify(condition),
+      condition,
       message: `This search returns ${result.length} item(s)`,
       stats
     });
@@ -133,15 +139,15 @@ export const databaseReadAnswer = async ({database, collection, condition}) => {
 
 export const databaseUpdateAnswer = async ({database, collection, condition, values}) => {
   
-  condition = (condition === "" ? "{}" : condition);
-  values = (values === "" ? "{}" : values);
+  condition = formatDataString(condition);
+  values = formatDataString(values);
   
   databaseManager
   .database(database)
   .then(db => db.update(
     collection, 
-    JSON.parse(condition), 
-    JSON.parse(values)
+    condition,
+    values
   ))
   .then(({result, stats}) => {
     saveStats({
@@ -149,8 +155,8 @@ export const databaseUpdateAnswer = async ({database, collection, condition, val
       driver: databaseManager.getCurrentDatabase(),
       database,
       collection,
-      condition: JSON.stringify(condition),
-      values: JSON.stringify(values),
+      condition,
+      values,
       message: `This operation updated ${result} item(s)`,
       stats
     });
@@ -160,13 +166,13 @@ export const databaseUpdateAnswer = async ({database, collection, condition, val
 
 export const databaseDeleteAnswer = async ({database, collection, condition}) => {
   
-  condition = (condition === "" ? "{}" : condition);
+  condition = formatDataString(condition);
   
   databaseManager
   .database(database)
   .then(db => db.delete(
     collection, 
-    JSON.parse(condition)
+    condition
   ))
   .then(({result, stats}) => {
     saveStats({
@@ -174,10 +180,181 @@ export const databaseDeleteAnswer = async ({database, collection, condition}) =>
       driver: databaseManager.getCurrentDatabase(),
       database,
       collection,
-      condition: JSON.stringify(condition),
+      condition,
       message: `This operation deleted ${result} item(s)`,
       stats
     });
     databaseManager.close();
   });
+}
+
+export const crudAnswer = async ({
+  database, 
+  collection, 
+  createDataset,
+  createItemsNumber,
+  readCondition,
+  updateCondition,
+  updateValues,
+  deleteCondition,
+  repeat
+}) => {
+
+  let data;
+  if (datasetManager.thereIsDataset(createDataset)) {
+    data = datasetManager.getDataset(createDataset);
+  }
+  else throw new Error("Dataset not found");
+
+  readCondition = formatDataString(readCondition);
+  updateCondition = formatDataString(updateCondition);
+  updateValues = formatDataString(updateValues);
+  deleteCondition = formatDataString(deleteCondition);
+
+  const list = {
+    create: [],
+    read: [],
+    update: [],
+    delete: []
+  }
+
+  const db = await databaseManager
+  .database(database);
+  
+  const items = generateSet(data, createItemsNumber);
+
+  for(let i = 0; i < repeat; i++) {
+  
+    const resultCreate = await db.create(
+      collection, 
+      items
+    );
+    const resultRead = await db.read(
+      collection, 
+      readCondition
+    );
+    const resultUpdate = await db.update(
+      collection, 
+      updateCondition, 
+      updateValues
+    );
+    const resultDelete = await db.delete(
+      collection,
+      deleteCondition
+    );
+    
+    list.create = [...list.create, resultCreate];
+    list.read = [...list.read, {
+      result: resultRead.result.length,
+      stats: resultRead.stats 
+    }];
+    list.update = [...list.update, resultUpdate];
+    list.delete = [...list.delete, resultDelete];
+  }
+
+  const stats = {
+    driver: databaseManager.getCurrentDatabase(),
+    repeat,
+    create: {
+      dataset: createDataset,
+      executions: {
+        result: list.create.map(a => a.result),
+        stats: {
+          diffTime: getDiffTime(list.create),
+          diffCPU: getDiffCPU(list.create),
+          diffExternal: getDiffExternal(list.create),
+          diffHeapTotal: getDiffHeapTotal(list.create),
+          diffHeapUsed: getDiffHeapUsed(list.create),
+          diffRam: getDiffRam(list.create)
+        }
+      }
+    },
+    read: {
+      condition: readCondition,
+      executions: {
+        result: list.read.map(a => a.result),
+        stats: {
+          diffTime: getDiffTime(list.read),
+          diffCPU: getDiffCPU(list.read),
+          diffExternal: getDiffExternal(list.read),
+          diffHeapTotal: getDiffHeapTotal(list.read),
+          diffHeapUsed: getDiffHeapUsed(list.read),
+          diffRam: getDiffRam(list.read)
+        }
+      }
+    },
+    update: {
+      condition: updateCondition,
+      values: updateValues,
+      executions: {
+        result: list.update.map(a => a.result),
+        stats: {
+          diffTime: getDiffTime(list.update),
+          diffCPU: getDiffCPU(list.update),
+          diffExternal: getDiffExternal(list.update),
+          diffHeapTotal: getDiffHeapTotal(list.update),
+          diffHeapUsed: getDiffHeapUsed(list.update),
+          diffRam: getDiffRam(list.update)
+        }
+      }
+    },
+    delete: {
+      condition: deleteCondition,
+      executions: {
+        result: list.delete.map(a => a.result),
+        stats: {
+          diffTime: getDiffTime(list.delete),
+          diffCPU: getDiffCPU(list.delete),
+          diffExternal: getDiffExternal(list.delete),
+          diffHeapTotal: getDiffHeapTotal(list.delete),
+          diffHeapUsed: getDiffHeapUsed(list.delete),
+          diffRam: getDiffRam(list.delete)
+        }
+      }
+    }
+  };
+
+  saveStats(stats);
+}
+
+const generateSet = (data, quantity) => {
+  const items = [];
+  for(let i = 0; i < quantity; i++) {
+    items[i] = data[i%data.length];
+  }
+  return items;
+}
+
+const formatDataString = data => {
+  return JSON.parse(data === "" ? "{}" : data);
+}
+
+const getDiffTime = list => {
+  return list.map(a => a.stats.diffTime)
+  .filter(a => a !== undefined);
+}
+
+const getDiffCPU = list => {
+  return list.map(a => a.stats.diffCPU)
+  .filter(a => a !== undefined);
+}
+
+const getDiffHeapTotal = list => {
+  return list.map(a => a.stats.diffHeapTotal)
+  .filter(a => a !== undefined);
+}
+
+const getDiffHeapUsed = list => {
+  return list.map(a => a.stats.diffHeapUsed)
+  .filter(a => a !== undefined);
+}
+
+const getDiffExternal = list => {
+  return list.map(a => a.stats.diffExternal)
+  .filter(a => a !== undefined);
+}
+
+const getDiffRam = list => {
+  return list.map(a => a.stats.diffRam)
+  .filter(a => a !== undefined);
 }
