@@ -92,14 +92,15 @@ export const databaseCreateAnswer = async ({dataset, database, collection}) => {
   databaseManager
   .database(database)
   .then(db => db.create(collection, data))
-  .then(result => {
+  .then(({result, stats}) => {
     saveStats({
       command: 'Create',
       driver: databaseManager.getCurrentDatabase(),
       database,
       collection,
       dataset,
-      message: `After that, ${result} item(s) was inserted`
+      message: `After that, ${result} item(s) was inserted`,
+      stats
     });
     databaseManager.close();
   });
@@ -116,14 +117,15 @@ export const databaseReadAnswer = async ({database, collection, condition}) => {
     collection, 
     JSON.parse(condition)
   ))
-  .then(result => {
+  .then(({result, stats}) => {
     saveStats({
       command: 'Read',
       driver: databaseManager.getCurrentDatabase(),
       database,
       collection,
       condition: JSON.stringify(condition),
-      message: `This search returns ${result.length} item(s)`
+      message: `This search returns ${result.length} item(s)`,
+      stats
     });
     databaseManager.close();
   });
@@ -141,7 +143,7 @@ export const databaseUpdateAnswer = async ({database, collection, condition, val
     JSON.parse(condition), 
     JSON.parse(values)
   ))
-  .then(result => {
+  .then(({result, stats}) => {
     saveStats({
       command: 'Update',
       driver: databaseManager.getCurrentDatabase(),
@@ -149,7 +151,8 @@ export const databaseUpdateAnswer = async ({database, collection, condition, val
       collection,
       condition: JSON.stringify(condition),
       values: JSON.stringify(values),
-      message: `This operation updated ${result} item(s)`
+      message: `This operation updated ${result} item(s)`,
+      stats
     });
     databaseManager.close();
   });
@@ -165,14 +168,15 @@ export const databaseDeleteAnswer = async ({database, collection, condition}) =>
     collection, 
     JSON.parse(condition)
   ))
-  .then(result => {
+  .then(({result, stats}) => {
     saveStats({
       command: 'Delete',
       driver: databaseManager.getCurrentDatabase(),
       database,
       collection,
       condition: JSON.stringify(condition),
-      message: `This operation deleted ${result} item(s)`
+      message: `This operation deleted ${result} item(s)`,
+      stats
     });
     databaseManager.close();
   });

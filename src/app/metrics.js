@@ -15,21 +15,20 @@ export default class Metric {
 
   start() {
     this.m = new jm({
-      isKb: false, 
+      isKb: true, 
       isMs: true, 
       isPrint: false
     });
   }
 
-  end() {
+  stop() {
     const {
       diffTime,
       diffCPU,
       diffExternal,
       diffHeapUsed,
       diffHeapTotal,
-      diffRAM,
-      tUnit
+      diffRAM
     } = this.m.stop();
 
     this.diffCPU = diffCPU;
@@ -38,18 +37,35 @@ export default class Metric {
     this.diffHeapTotal = diffHeapTotal;
     this.diffHeapUsed = diffHeapUsed;
     this.diffRAM = diffRAM;
-    this.tUnit = tUnit;
   }
 
   result() {
-    return {
+    const data = {
       diffTime: this.diffTime,
       diffCPU: this.diffCPU,
-      diffExternal: this.diffExternal,
-      diffHeapUsed: this.diffHeapUsed,
-      diffHeapTotal: this.diffHeapTotal,
-      diffRAM: this.diffRAM,
-      tUnit: this.tUnit
+      diffExternal: this.convertToKBytes(this.diffExternal),
+      diffHeapUsed: this.convertToKBytes(this.diffHeapUsed),
+      diffHeapTotal: this.convertToKBytes(this.diffHeapTotal),
+      diffRAM: this.convertToKBytes(this.diffRAM),
+    };
+    
+    return data;
+  }
+
+  convertToKBytes(data) {
+    const [value, unit] = data.split(' ');
+    const numeric = Number.parseFloat(value);
+    switch(unit) {
+      case 'Bytes':
+        return numeric/1024;
+      case 'KB':
+        return numeric;
+      case 'MB':
+        return numeric*1024;
+      case 'GB':
+        return numeric*Math.pow(1024,2);
+      case 'TB':
+        return numeric*Math.pow(1024,3);
     }
   }
 }
