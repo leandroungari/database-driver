@@ -1,6 +1,7 @@
 import databaseManager from '../app/database';
 import datasetManager from '../app/dataset';
 import { saveStats } from '../app/stats';
+import { Mongoose } from 'mongoose';
 
 
 export const initialAnswer = async (answer, prompt) => {
@@ -317,12 +318,30 @@ export const crudAnswer = async ({
   saveStats(stats);
 }
 
+const generate = (name, contador) => {
+  const table = {
+    "Mongoose": () => Mongoose.Types.ObjectId(generateId(contador)),
+    "MongoClient": () => generateId(contador)
+  }
+
+  return table[name]();
+}
+
 const generateSet = (data, quantity) => {
+  let contador = 0;
   const items = [];
   for(let i = 0; i < quantity; i++) {
-    items[i] = data[i%data.length];
+    items[i] = JSON.parse(JSON.stringify(data[i%data.length]));
+    items[i]._id = generate(databaseManager.getCurrentDatabase(), contador);
+    contador++;
   }
+  
   return items;
+}
+
+const generateId = (number) => {
+  
+  return number.toString(16);
 }
 
 const formatDataString = data => {

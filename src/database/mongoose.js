@@ -33,42 +33,54 @@ export default class MongooseDB {
   }
 
   async create(collection, data) {
-    return new Promise((resolve, reject) => {
-      const model = this.getModel(collection);
-      model.insertMany(data, (error, docs) => {
-        if(error) reject(error);
-        resolve(docs.length);
-      });
-    });
+    
+    console.log(data.length);
+    const model = this.getModel(collection);
+    
+    try {
+      const result = await model.insertMany(data);
+      return result.length;
+    } 
+    catch(error) {
+      console.log(error);
+    } 
+    
   }
 
   async read(collection, condition) {
-    return new Promise((resolve, reject) => {
-      const model = this.getModel(collection);
-      model.find(condition).exec((error, result) => {
-        if (error) reject(error);
-        resolve(result);
-      });
-    });
+    
+    const model = this.getModel(collection);
+
+    try {
+      return await model.find(condition);
+    }
+    catch(error) {
+      console.log(error);
+    }
   }
 
-  update(collection, condition, values) {
-    return new Promise((resolve, reject) => {
-      const model = this.getModel(collection);
-      model.updateMany(condition, values, (err, res) => {
-        if(err) reject(err);
-        resolve(res.nModified);
-      })
-    });
+  async update(collection, condition, values) {
+
+    const model = this.getModel(collection);
+    try{
+      const result = await model.updateMany(condition, {$set: values});
+      return result.nModified;
+    }
+    catch(error) {
+      console.log(error);
+    }
   }
 
-  delete(collection, condition) {
-    return new Promise((resolve, reject) => {
-      const model = this.getModel(collection);
-      model.deleteMany(condition, (err, res) => {
-        if(err) reject(err);
-        resolve(res.deletedCount);
-      });
-    });
+  async delete(collection, condition) {
+    
+    const model = this.getModel(collection);
+    
+    try{
+      const res = await model.deleteMany(condition);
+      return res.deletedCount
+    }
+    catch(error) {
+      console.log(error);
+    }
   }
 }

@@ -1,6 +1,6 @@
 app.json
 dataset.json
-stats.json
+stats*
 
 # Logs
 logs

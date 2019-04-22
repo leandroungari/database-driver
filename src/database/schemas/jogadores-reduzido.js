@@ -7,13 +7,6 @@ export default new mongoose.Schema({
   Age: String,
   Photo: String,
   Nationality: String,
-  Flag: String,
-  Overall: String,
-  Potential: String,
-  Club: String,
-  'Club Logo': String,
-  Value: String,
-  Wage: String
 });
 
 
