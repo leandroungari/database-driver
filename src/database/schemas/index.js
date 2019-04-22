@@ -1,6 +1,8 @@
 //creating schemas
-import jogadores from "./jogadores";
+import jogadoresCompleto from "./jogadores-completo";
+import jogadoresReduzido from "./jogadores-reduzido";
 
 export {
-  jogadores
+  jogadoresCompleto,
+  jogadoresReduzido
 };

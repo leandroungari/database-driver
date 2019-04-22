@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 import {
-  jogadores
+  jogadoresCompleto,
+  jogadoresReduzido
 } from './schemas';
 
 const schemas = {
-  jogadores
+  "jogadores-reduzido": jogadoresReduzido,
+  "jogadores-completo": jogadoresCompleto
 };
 
 export default class MongooseDB {

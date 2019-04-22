@@ -54,8 +54,18 @@ export default class Metric {
 
   convertToKBytes(data) {
     const [value, unit] = data.split(' ');
-    const numeric = Number.parseFloat(value);
+    let numeric;
+    
+    if(value === 'NaN' || value === '0') {
+      numeric = 0;
+    }
+    else {
+      numeric = Number.parseFloat(value);
+    }
+
     switch(unit) {
+      case 'Byte':
+        return numeric/1024;
       case 'Bytes':
         return numeric/1024;
       case 'KB':

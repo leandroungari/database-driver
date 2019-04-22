@@ -1,7 +1,6 @@
 import databaseManager from '../app/database';
 import datasetManager from '../app/dataset';
 import { saveStats } from '../app/stats';
-import { get } from 'mongoose';
 
 
 export const initialAnswer = async (answer, prompt) => {
@@ -242,6 +241,7 @@ export const crudAnswer = async ({
       collection,
       deleteCondition
     );
+
     
     list.create = [...list.create, resultCreate];
     list.read = [...list.read, {
@@ -355,6 +355,6 @@ const getDiffExternal = list => {
 }
 
 const getDiffRam = list => {
-  return list.map(a => a.stats.diffRam)
+  return list.map(a => a.stats.diffRAM)
   .filter(a => a !== undefined);
 }
