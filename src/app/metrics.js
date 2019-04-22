@@ -9,14 +9,14 @@ export default class Metric {
     this.diffCPU = undefined;
     this.diffTime = undefined;
     this.tUnit = undefined;
-    
+
     this.m = undefined;
   }
 
   start() {
     this.m = new jm({
-      isKb: true, 
-      isMs: true, 
+      isKb: true,
+      isMs: true,
       isPrint: false
     });
   }
@@ -43,39 +43,44 @@ export default class Metric {
     const data = {
       diffTime: this.diffTime,
       diffCPU: this.diffCPU,
-      diffExternal: this.convertToKBytes(this.diffExternal),
-      diffHeapUsed: this.convertToKBytes(this.diffHeapUsed),
-      diffHeapTotal: this.convertToKBytes(this.diffHeapTotal),
-      diffRAM: this.convertToKBytes(this.diffRAM),
+      diffExternal: this.convertToKBytes(
+        this.diffExternal
+      ),
+      diffHeapUsed: this.convertToKBytes(
+        this.diffHeapUsed
+      ),
+      diffHeapTotal: this.convertToKBytes(
+        this.diffHeapTotal
+      ),
+      diffRAM: this.convertToKBytes(this.diffRAM)
     };
-    
+
     return data;
   }
 
   convertToKBytes(data) {
-    const [value, unit] = data.split(' ');
+    const [value, unit] = data.split(" ");
     let numeric;
-    
-    if(value === 'NaN' || value === '0') {
+
+    if (value === "NaN" || value === "0") {
       numeric = 0;
-    }
-    else {
+    } else {
       numeric = Number.parseFloat(value);
     }
 
-    switch(unit) {
-      case 'Byte':
-        return numeric/1024;
-      case 'Bytes':
-        return numeric/1024;
-      case 'KB':
+    switch (unit) {
+      case "Byte":
+        return numeric / 1024;
+      case "Bytes":
+        return numeric / 1024;
+      case "KB":
         return numeric;
-      case 'MB':
-        return numeric*1024;
-      case 'GB':
-        return numeric*Math.pow(1024,2);
-      case 'TB':
-        return numeric*Math.pow(1024,3);
+      case "MB":
+        return numeric * 1024;
+      case "GB":
+        return numeric * Math.pow(1024, 2);
+      case "TB":
+        return numeric * Math.pow(1024, 3);
     }
   }
 }

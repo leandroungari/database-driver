@@ -201,7 +201,7 @@ export const crudAnswer = async ({
 
   let data;
   if (datasetManager.thereIsDataset(createDataset)) {
-    data = datasetManager.getDataset(createDataset);
+    data = datasetManager.getDataset(createDataset).data;
   }
   else throw new Error("Dataset not found");
 
@@ -219,9 +219,9 @@ export const crudAnswer = async ({
 
   const db = await databaseManager
   .database(database);
-  
-  const items = generateSet(data, createItemsNumber);
 
+  const items = generateSet(data, createItemsNumber);
+  
   for(let i = 0; i < repeat; i++) {
   
     const resultCreate = await db.create(

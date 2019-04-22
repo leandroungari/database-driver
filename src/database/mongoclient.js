@@ -7,7 +7,6 @@ const url = 'mongodb://localhost:27017';
 export default class MongoClientDB {
   constructor() {
     this.database = undefined;
-    this.client = new MongoClient(url, { useNewUrlParser: true });
   }
 
   close() {
@@ -16,6 +15,7 @@ export default class MongoClientDB {
   }
 
   async connect(databaseName) {
+    this.client = new MongoClient(url, { useNewUrlParser: true });
     await this.client.connect();
     this.database = await this.client.db(databaseName);
     return this;

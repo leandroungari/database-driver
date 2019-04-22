@@ -42,7 +42,7 @@ class DatabaseManager {
   }
 
   async create(collection, data) {
-
+   
     try {
       const metric = new Metric();
       metric.start();
