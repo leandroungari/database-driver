@@ -34,7 +34,6 @@ export default class MongooseDB {
 
   async create(collection, data) {
     
-    console.log(data.length);
     const model = this.getModel(collection);
     
     try {

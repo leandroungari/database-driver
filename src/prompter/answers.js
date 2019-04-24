@@ -1,7 +1,8 @@
 import databaseManager from '../app/database';
 import datasetManager from '../app/dataset';
 import { saveStats } from '../app/stats';
-import { Mongoose } from 'mongoose';
+import mongoose from "mongoose";
+
 
 
 export const initialAnswer = async (answer, prompt) => {
@@ -222,9 +223,11 @@ export const crudAnswer = async ({
   .database(database);
 
   const items = generateSet(data, createItemsNumber);
+  console.log(`Conjunto gerado.`);
   
   for(let i = 0; i < repeat; i++) {
-  
+    
+    console.log(`Iteração ${i} iniciada.`);
     const resultCreate = await db.create(
       collection, 
       items
@@ -251,6 +254,8 @@ export const crudAnswer = async ({
     }];
     list.update = [...list.update, resultUpdate];
     list.delete = [...list.delete, resultDelete];
+
+    console.log(`Iteração ${i} finalizada.`);
   }
 
   const stats = {
@@ -316,11 +321,13 @@ export const crudAnswer = async ({
   };
 
   saveStats(stats);
+  
 }
 
 const generate = (name, contador) => {
   const table = {
-    "Mongoose": () => Mongoose.Types.ObjectId(generateId(contador)),
+    //"Mongoose": () => mongoose.Types.ObjectId(generateId(contador)),
+    "Mongoose": () => mongoose.Types.ObjectId(),
     "MongoClient": () => generateId(contador)
   }
 
@@ -331,8 +338,13 @@ const generateSet = (data, quantity) => {
   let contador = 0;
   const items = [];
   for(let i = 0; i < quantity; i++) {
-    items[i] = JSON.parse(JSON.stringify(data[i%data.length]));
+    /*items[i] = JSON.parse(JSON.stringify(data[i%data.length]));
     items[i]._id = generate(databaseManager.getCurrentDatabase(), contador);
+    */
+    items[i] = {
+      ...data[i%data.length],
+      _id: generate(databaseManager.getCurrentDatabase(), contador)
+    }
     contador++;
   }
   
