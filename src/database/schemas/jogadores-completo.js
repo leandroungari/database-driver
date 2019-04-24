@@ -9,7 +9,6 @@ export default new mongoose.Schema({
   Overall: String,
   Potential: String,
   Club: String,
-  'Club Logo': String,
   Value: String,
   Wage: String,
   Special: String,
