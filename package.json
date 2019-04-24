@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "babel-node src/index.js",
     "build": "babel src --out-dir dist",
-    "play": "node dist/index.js"
+    "play": "node dist/index.js",
+    "calc": "babel-node src/size-register.js",
+    "stats": "babel-node src/stats.js"
   },
   "repository": "https://github.com/leandroungari/database-driver.git",
   "author": "Leandro Ungari <leandroungari@gmail.com>",
